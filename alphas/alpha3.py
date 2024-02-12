@@ -36,10 +36,13 @@ def alpha(book_value):
             volume = fill_nan(volume)
             volume = volume.drop(columns=['Minutes'])
             
+
             position = ((high + low) / 2 - close) / volume
             ranking = (position.rank(axis=1, ascending=True, method='first') - 50) / 99
             ranking = pd.concat([minutes, ranking], axis=1)
             alpha = normalize_df(ranking, scale=book_value)
+
+
             close = pd.read_csv(directory + '/' + filename)
             returns = calculate_returns(alpha, close)
             array.append(float(sum(returns)) - book_value)
